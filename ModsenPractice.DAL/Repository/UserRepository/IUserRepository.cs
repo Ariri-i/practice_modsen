@@ -2,8 +2,8 @@
 
 namespace ModsenPractice.DAL.Repository.UserRepository
 {
-    public interface IUserRepository : IBaseRepository<User>
+    public interface IUserRepository
     {
-        List<User> GetFullList();
+        Task SoftDelete(int Id);
     }
 }

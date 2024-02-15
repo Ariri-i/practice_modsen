@@ -1,15 +1,12 @@
-﻿
-using System.Threading.Tasks;
-
-namespace ModsenPractice.DAL.Repository
+﻿namespace ModsenPractice.DAL.Repository
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<T> Add(T entity);
+        Task Add(T entity);
 
-        void Delete(T entity);
+        Task HardDelete(int Id);
 
-        void Update(T entity);
+        Task Update(T entity);
 
         Task<T> GetById(int Id);
 

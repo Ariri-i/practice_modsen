@@ -1,4 +1,5 @@
 ﻿using ModsenPractice.DAL.Models;
+using ModsenPractice.DAL.Repository.ProductCategoryRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,39 +8,16 @@ using System.Threading.Tasks;
 
 namespace ModsenPractice.DAL.Repository.ProductRepository
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository(dbContext dbContext) : GenericRepository<Product>(dbContext), IProductRepository
     {
-        private readonly dbContext _dbContext;
-
-        public ProductRepository(dbContext dbContext)
+        public async Task SoftDelete(int Id)
         {
-            _dbContext = dbContext;
-        }
-
-
-        public void Add(Product Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Product Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Product GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Product> GetFullList()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Product Entity)
-        {
-            throw new NotImplementedException();
+            var product = await GetById(Id);
+            if (product != null)
+            {
+                product.IsDeleted = true;
+                await Update(product);
+            }
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ModsenPractice.DAL.Models.GeneralModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModsenPractice.DAL.Models
 {
-    public class Product
+    public class Product : BaseModel
     {
-        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int Cost { get; set; }
 

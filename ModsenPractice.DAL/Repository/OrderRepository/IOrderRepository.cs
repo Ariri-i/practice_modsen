@@ -2,8 +2,8 @@
 
 namespace ModsenPractice.DAL.Repository.OrderRepository
 {
-    public interface IOrderRepository : IBaseRepository<Order>
+    public interface IOrderRepository
     {
-        List<Order> GetFullList();
+        Task SoftDelete(int Id);
     }
 }

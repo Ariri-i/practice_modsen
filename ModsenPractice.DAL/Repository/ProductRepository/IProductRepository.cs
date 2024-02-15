@@ -4,6 +4,6 @@ namespace ModsenPractice.DAL.Repository.ProductRepository
 {
     public interface IProductRepository
     {
-        List<Product> GetFullList();
+        Task SoftDelete(int Id);
     }
 }

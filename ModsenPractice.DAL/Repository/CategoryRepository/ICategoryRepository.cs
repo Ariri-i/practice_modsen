@@ -2,8 +2,8 @@
 
 namespace ModsenPractice.DAL.Repository.CategoryRepository
 {
-    public interface ICategoryRepository : IBaseRepository<Category>
+    public interface ICategoryRepository
     {
-       
+        Task SoftDelete(int Id);
     }
 }

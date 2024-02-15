@@ -2,8 +2,5 @@
 
 namespace ModsenPractice.DAL.Repository.ProductCategoryRepository
 {
-    public interface IProductCategoryRepository:IBaseRepository<ProductCategory>
-    {
-        List<ProductCategory> GetFullList();
-    }
+    public interface IProductCategoryRepository { }
 }

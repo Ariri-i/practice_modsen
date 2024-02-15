@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ModsenPractice.DAL.Models.GeneralModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModsenPractice.DAL.Models
 {
-    public class Order
+    public class Order : BaseModel
     {
-        public int Id { get; set; }
         public string Name { get; set; } = null!;
 
         [ForeignKey("User")]

@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace ModsenPractice.DAL.Repository.CategoryRepository
 {
-    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
+    public class CategoryRepository(dbContext dbContext) : GenericRepository<Category>(dbContext), ICategoryRepository
     {
-        private readonly dbContext _dbContext;
-
-        public CategoryRepository(dbContext dbContext) : base(dbContext) 
+        public async Task SoftDelete(int Id)
         {
-            _dbContext = dbContext;
+            var category = await GetById(Id);
+            if (category != null)
+            {
+                category.IsDeleted = true;
+                await Update(category);
+            }
         }
-
-
-
     }
 }

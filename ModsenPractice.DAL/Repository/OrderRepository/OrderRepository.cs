@@ -7,39 +7,16 @@ using System.Threading.Tasks;
 
 namespace ModsenPractice.DAL.Repository.OrderRepository
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository(dbContext dbContext) : GenericRepository<Order>(dbContext), IOrderRepository
     {
-        private readonly dbContext _dbContext;
-
-        public OrderRepository(dbContext dbContext)
+        public async Task SoftDelete(int Id)
         {
-            _dbContext = dbContext;
-        }
-
-
-        public void Add(Order Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Order Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Order GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Order> GetFullList()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Order Entity)
-        {
-            throw new NotImplementedException();
+            var order = await GetById(Id);
+            if (order != null)
+            {
+                order.IsDeleted = true;
+                await Update(order);
+            }
         }
     }
 }

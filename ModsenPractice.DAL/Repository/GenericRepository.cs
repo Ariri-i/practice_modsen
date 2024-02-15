@@ -1,51 +1,50 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ModsenPractice.DAL.Repository
 {
-    public class GenericRepository<T>: IBaseRepository<T> where T : class
+    public class GenericRepository<T>(dbContext dbContext): IBaseRepository<T> where T : class
     {
-        private readonly dbContext _dbContext;
-        private readonly DbSet<T> _dbSet;
+        private readonly dbContext _dbContext = dbContext;
+        private readonly DbSet<T> _dbSet = dbContext.Set<T>();
 
-        public GenericRepository(dbContext dbContext)
-        {
-            _dbContext = dbContext;
-            _dbSet = dbContext.Set<T>();
-        }
 
-        public async Task<T> Add(T entity)
+        public async Task Add(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
-            return entity;
         }
 
-        public async Task Delete(T entity)
+        public async Task Update(T entity)
         {
-            _dbSet.Remove(entity);
+            if (_dbContext.Entry(entity).State == EntityState.Detached)
+            {
+                _dbSet.Attach(entity);
+            }
+
+            _dbContext.Entry(entity).State = EntityState.Modified;
+
+            _dbSet.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
-       
-        public async Task<T> GetById(int Id)
-        {
 
-            return await _dbSet.FindAsync(Id);
-    
+        public async Task HardDelete(int Id)
+        {
+            var entity = await GetById(Id);
+
+            if (entity != null)
+            {
+                if (_dbContext.Entry(entity).State == EntityState.Detached)
+                {
+                    _dbSet.Attach(entity);
+                }
+
+                _dbSet.Remove(entity);
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
-        public void Update(T entity)
-        {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.SaveChanges();
-        }
-        public async Task<List<T>> GetAll()
-        {
-            return await _dbSet.ToListAsync();
-        }
+        public async Task<List<T>> GetAll() => await _dbSet.ToListAsync();
+
+        public async Task<T> GetById(int Id) => await _dbSet.FindAsync(Id) ?? throw new Exception($"Entity wasn't found using the given id - {Id}.");
     }
 }

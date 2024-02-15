@@ -7,39 +7,16 @@ using System.Threading.Tasks;
 
 namespace ModsenPractice.DAL.Repository.UserRepository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(dbContext dbContext) : GenericRepository<User>(dbContext), IUserRepository
     {
-        private readonly dbContext _dbContext;
-
-        public UserRepository(dbContext dbContext)
+        public async Task SoftDelete(int Id)
         {
-            _dbContext = dbContext;
-        }
-
-
-        public void Add(User Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(User Entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<User> GetFullList()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(User Entity)
-        {
-            throw new NotImplementedException();
+            var user = await GetById(Id);
+            if (user != null)
+            {
+                user.IsDeleted = true;
+                await Update(user);
+            }
         }
     }
 }
